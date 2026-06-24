@@ -9,37 +9,31 @@ pipeline {
     parameters {
         choice(name: 'navigateurs', choices: ['tous', 'chromium', 'firefox', 'webkit'], description: 'Choisissez le navigateur')
         choice(name: 'tags', choices: ['rien', '@valide', '@invalide'], description: 'Choisissez le tag')
-
     }
 
     stages {
         stage('installation') {
             steps {
-                    sh "npm install"
+                sh "npm install"
             }
         }
-    }
 
-    stages {
         stage('lancer le test') {
             steps {
                 script {
-                    if (navigateurs.navigateurs == 'tous'){
-                        if (params.tags == "rien") 
-                            sh "npx playwright test"
-                        else
-                            sh "npx playwright test --grep ${params.tags}"   
-                    }
-                    else{
+                    if (params.navigateurs == 'tous') {
                         if (params.tags == "rien") {
-                            sh "npx playwright test --project =${params.navigateurs}"
-                        else
-                        sh "npx playwright test --project =${params.navigateurs} --grep ${params.tags}"   
+                            sh "npx playwright test"
+                        } else {
+                            sh "npx playwright test --grep ${params.tags}"
+                        }
+                    } else {
+                        if (params.tags == "rien") {
+                            sh "npx playwright test --project=${params.navigateurs}"
+                        } else {
+                            sh "npx playwright test --project=${params.navigateurs} --grep ${params.tags}"
+                        }
                     }
-                    
-                    }
-
-
                 }
             }
         }
