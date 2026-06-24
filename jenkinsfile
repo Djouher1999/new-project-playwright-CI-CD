@@ -1,0 +1,49 @@
+pipeline {
+    agent {
+        docker { 
+            image 'mcr.microsoft.com/playwright:v1.59.1-noble'
+            args '-u=root --entrypoint='
+        }  
+    }
+
+    parameters {
+        choice(name: 'navigateurs', choices: ['tous', 'chromium', 'firefox', 'webkit'], description: 'Choisissez le navigateur')
+        choice(name: 'tags', choices: ['rien', '@valide', '@invalide'], description: 'Choisissez le tag')
+
+    }
+
+    stages {
+        stage('installation') {
+            steps {
+                script {
+                    sh "npx playwright install"
+                }
+            }
+        }
+    }
+
+    stages {
+        stage('lancer le test') {
+            steps {
+                script {
+                    if (tags.navigateurs == 'tous'){
+                        if (params.tags == "rien") 
+                            sh "npx playwright test"
+                        else
+                            sh "npx playwright test --grep ${params.tags}"   
+                    }
+                    else{
+                        if (params.tags == "rien") {
+                            sh "npx playwright test --project =${params.navigateurs}"
+                        else
+                        sh "npx playwright test --project =${params.navigateurs} --grep ${params.tags}"   
+                    }
+                    
+                    }
+
+
+                }
+            }
+        }
+    }
+}

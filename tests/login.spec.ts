@@ -1,7 +1,7 @@
 import {expect, test } from '@playwright/test'
 
 
-test("inscription valide", async function ({page}){
+test("inscription valide @valide", async function ({page}){
 // on vas vistter le site
 await page.goto("https://thrundrz.fr/gestion/")
 
