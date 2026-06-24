@@ -1,6 +1,6 @@
 import {test, expect} from "@playwright/test";
 
-test("US-05 : Création d'un devis @valide", async ({page}) => {
+test("US-05 : Création d'un devis @invalide", async ({page}) => {
     // Visiter la 1ère page ...
     await page.goto("https://thrundrz.fr/gestion/")
     
